@@ -1,79 +1,30 @@
-Listfile assistance
+ListFile enhancements
 
 Author: tar80 <tar80master@google.com>
 License: MIT License
 Repository: https://github.com/tar80/ppm-listfile
 ===============================================================================
 
-リストファイル上での操作を補助するプラグインです。
-以下の機能があります。
+リストファイル上での操作を補助するプラグインです。以下の機能を提供します。
 
-	1. リストファイル上のエントリを指定された方法で開く
-	2. リストファイルのコメント、並び順、マーク状態を保存する
-
-1.はおもにppm-grepで開いたgrep結果に対してコマンドを実行するための機能です。
-2.はPPx186現在、リストファイルの書き換え時に並び順、マーク状態が参照されないので
- %K"@W"の代替として使用します。
-
-1.の詳細
-
-	標準でgvim,ppv,sedが指定できます。以下のマクロを編集して使用します。
-
-gvim
-	*ifmatch *.xgrep,%FDV %: *script %*getcust(S_ppm#plugins:ppm-listfile)\script\%*getcust(S_ppm#global:scripttype)\lf_execute.js,gvim%:*stop
-	%Ox gvim --remote-tab-silent %*script(%*getcust(S_ppm#global:lib)\entity_path.js)
-
-ppv
-	*if 4==%*js(PPx.Result=PPx.DirectoryType;)%:*script %*getcust(S_ppm#plugins:ppm-listfile)\script\%*getcust(S_ppm#global:scripttype)\lf_execute.js,ppv%:*stop
-
-sed
-	*if 4==%*js(PPx.Result=PPx.DirectoryType;)%:*script %*getcust(S_ppm#plugins:ppm-listfile)\script\%*getcust(S_ppm#global:scripttype)\lf_execute.js,sed,1%:*stop
-
-gvim以外のエディタでppm-grep結果を開くには、ppm\cache\xxx\script\lf_method.jsを
-編集します。以下を参考にしてください。
-
-lf_method.js
-
-	(function() {
-		return {
-			ここにメソッドを追加
-		}
-	})();
-
-エディタ用メソッド
-
-	"メソッド名": function () {
-		/* ここからreturnまでの間が初回に実行される */
-		// 起動とフォーカス
-		PPx.Execute(
-			'*focus #%*findwindowclass("エディタのクラス名"),"エディタのパス"'
-		);
-	
-		return function (path, shortname, number, duplicate, term) {
-		/* ここからパスを一つずつ受け取る処理
-			path      = ファイルパス(リストファイル上のエントリ)
-			shortname = ショートネーム(リストファイル上のエントリ)
-			number    = 行数(shotrnameに設定された数値※ppm-grep用)
-			duplicate = 真偽値true/false(重複パスの実行)
-			term      = 検索語(ppm-grep用)
-		*/
-			PPx.Execute('エディタのコマンドライン');
-		};
-	},
-
-git-grepの結果をエディタで開くメソッドは、"メソッド名_commit"で定義できますが
-難解なマクロを組む必要があり実質vim用です。具体的にはvim上でgit cat-fileした
-結果を展開しています。
+- リンク切れをマーク状態にする機能
+- 書き換え機能の拡張  
+  PPx197現在、リストファイルの書き換え時にマーク・ハイライト状態は更新されません  
+  この機能は通常の書き換えに加え、マーク・ハイライト状態を更新します。
+- リストファイルへメモを書き込む機能  
+  通常リストファイルへのエントリ追加はD&Dや*ppcfileを使用してパスを追加しますが  
+  パスの代わりにメモ書きをエントリとして追加できます。
+- 仮想エントリのリネーム機能  
+  実体の存在しないエントリは通常の方法ではリネームできないので、直接ファイルを  
+  読み書きして擬似的にリネームします。
 
 ===============================================================================
 構成ファイルの説明
 
-	script\xxx\lf_execute.js	リストファイル上の選択エントリを指定
-		した方法で開く
-	script\xxx\lf_save.js		リストファイルの並び順、コメント、
-		マーク状態を書き換える
-	\userscript\lf_method.js	リストファイル上のエントリを開く方法を
-		定義できる
+	dist\markBrokenLink.js	リストファイル上の存在しないパスをマーク
+	dist\noteListFile.js	リストファイルにメモエントリを追加
+	dist\updateListFile.js	リストファイル書き換え機能の強化
+	dist\renameLfEntry.js	リストファイル上の仮想エントリをリネーム
 
 ===============================================================================
 デフォルトキー設定

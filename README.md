@@ -1,13 +1,12 @@
-# plugin name
+# ppm-listfile
 
 ppx-plugin-manager用のプラグインです。  
 リストファイルの機能を強化します。  
 
-- ppm-grepの出力したエントリに対するコマンドの実行  
-- 並び順、コメント、マーク状態のリストファイルへの保存  
+- 並び順、コメント、マーク状態の書き換え
+- リストファイルにメモエントリを追加
 
-ができます。
-
+などの機能を提供します。
 
 ## インストール
 
@@ -16,4 +15,5 @@ ppx-plugin-manager用のプラグインです。
 ```text
 remote 'tar80/ppm-listfile'
 ```
+<!-- remote '<plugin-name>' [{branch: <branch-name>, commit: <commit-hash>}] -->
 
