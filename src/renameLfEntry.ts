@@ -15,7 +15,7 @@ import debug from '@ppmdev/modules/debug.ts';
 const lang = langLF[useLanguage()];
 
 const main = (): number => {
-  const [enableUndo, argEnc] = safeArgs(false, info.encode);
+  const [argEnc] = safeArgs(info.encode);
   const dirType = PPx.DirectoryType;
 
   if (PPx.EntryState < 2) {
@@ -30,12 +30,12 @@ const main = (): number => {
   const enc = fileEnc(argEnc);
 
   if (fso.FileExists(entry) || fso.FolderExists(entry)) {
-    doRename(enableUndo);
+    PPx.Execute('%K"@R"');
 
     return 4;
   }
 
-  const input = PPx.Extract('%*input("%C" -title:"Rename" -mode:Ec -k *cursor -8%%:*mapkey use,K_ppmRename)');
+  const input = PPx.Extract(`%*input("%C" -title:"%*getcust(Mes0411:TREN)" -mode:Ec -k *cursor -8%%:*mapkey use,K_ppmRename)`);
   const exitcode = PPx.Extract();
 
   if (!isZero(exitcode) || isEmptyStr(input)) {
@@ -71,17 +71,6 @@ const main = (): number => {
   PPx.Execute(`*wait 100,1%:*jumppath -entry:"${input}"`);
 
   return 4;
-};
-
-/**
- * Execute either standard rename or rename with undo function
- * @param undo Whether to enable the undo function
- */
-const doRename = (undo: boolean): void => {
-  const cmdline = undo
-    ? `*ppcfile !rename -min -same:skip -error:dialog -undolog:on -log:off -name:"%*input("%C" -title:"${lang.rename}" -mode:Ec -k *cursor -8%%:*mapkey use,K_ppmRename)"`
-    : '%K"@R"';
-  PPx.Execute(cmdline);
 };
 
 PPx.result = main();

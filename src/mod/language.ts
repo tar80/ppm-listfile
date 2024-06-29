@@ -14,13 +14,13 @@ export const langLF = {
     failedRewrite: 'Failed to rewrite',
     couldNotRead: 'Could not read ListFile',
     couldNotGetEntry: 'Could not get entry information',
-    rename: 'Undoable rename'
+    undoable: '(Undoable)'
   },
   ja: {
     failedRewrite: '書き換えに失敗しました',
     couldNotRead: 'リストファイルを読み込めませんでした',
     couldNotGetEntry: 'エントリ情報を取得できませんでした',
-    rename: '名前変更(Undo有効)'
+    undoable: '(Undo有効)'
   }
 };
 
