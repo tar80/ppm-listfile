@@ -1,0 +1,5 @@
+;<readonly>; 1
+;<hidden>; 2
+;<system>; 4
+;<label>; 8
+;<subdirectory>; 10

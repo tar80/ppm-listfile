@@ -9,7 +9,7 @@ import {safeArgs} from '@ppmdev/modules/argument.ts';
 import {info, useLanguage} from '@ppmdev/modules/data.ts';
 import {readLines, writeLines} from '@ppmdev/modules/io.ts';
 import {langNoteListFile} from './mod/language.ts';
-import {fileEnc} from './mod/core.ts';
+import {fileEnc, getIndex} from './mod/core.ts';
 import debug from '@ppmdev/modules/debug.ts';
 
 const lang = langNoteListFile[useLanguage()];
@@ -70,7 +70,7 @@ const main = () => {
  * @return `[attributes, escaped input]`
  */
 const noteEntry = (): [number, string] => {
-  const inputOpts = `'title':'Note  ${lang.subTitle}','mode':'e','leavecancel':true,'list':false,'module':false`;
+  const inputOpts = `'title':'Note  ${lang.subTitle}','mode':'e','leavecancel':true,'list':'off','module':'off'`;
   const input = PPx.Extract(`%*script("%sgu'ppmlib'\\input.js","{${inputOpts}}")`);
 
   if (input === '[error]' || isEmptyStr(input)) {
@@ -81,35 +81,6 @@ const noteEntry = (): [number, string] => {
   const [attributes, note] = input.replace(/^((\d+):\s*)?(.+)$/, `$2${DELIM}$3`).split(DELIM);
 
   return [Number(attributes), note.replace(/"/g, '`')];
-};
-
-/**
- * Get the status of "." and ".." in the entry list
- * @return number of dot-entries
- */
-const _dotEntries = (): number => {
-  const [root, parent] = PPx.Extract('%*getcust(XC_tdir)').split(',');
-
-  return Number(root) + Number(parent);
-};
-
-/**
- * Get the index of the cursor position on the ListFile
- * @param data Array of line information in the ListFile
- * @return Index number of cursor position in the ListFile
- */
-const getIndex = (data: string[]): number => {
-  let n = 0;
-
-  while (data.length > n) {
-    if (data[n].indexOf(';') !== 0) {
-      break;
-    }
-
-    n++;
-  }
-
-  return PPx.Entry.Index + _dotEntries() + n;
 };
 
 main();

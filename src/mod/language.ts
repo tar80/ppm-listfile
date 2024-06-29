@@ -13,11 +13,24 @@ export const langLF = {
   en: {
     failedRewrite: 'Failed to rewrite',
     couldNotRead: 'Could not read ListFile',
+    couldNotGetEntry: 'Could not get entry information',
     rename: 'Undoable rename'
   },
   ja: {
     failedRewrite: '書き換えに失敗しました',
     couldNotRead: 'リストファイルを読み込めませんでした',
+    couldNotGetEntry: 'エントリ情報を取得できませんでした',
     rename: '名前変更(Undo有効)'
+  }
+};
+
+export const langEnhanceAttributes = {
+  en: {
+    couldNotRead: 'Could not read ListFile',
+    couldNotGetEntry: 'Could not get entry information',
   },
-}
+  ja: {
+    couldNotRead: 'リストファイルを読み込めませんでした',
+    couldNotGetEntry: 'エントリ情報を取得できませんでした',
+  }
+};
