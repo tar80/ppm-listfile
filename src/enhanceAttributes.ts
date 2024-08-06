@@ -11,6 +11,7 @@ import {langEnhanceAttributes} from './mod/language.ts';
 import {fileEnc, getIndex} from './mod/core.ts';
 import debug from '@ppmdev/modules/debug.ts';
 
+const LIST_NAME = "%sgu'ppmcache'\\complist\\attributes.txt";
 const lang = langEnhanceAttributes[useLanguage()];
 
 const main = () => {
@@ -50,8 +51,14 @@ const main = () => {
   const rgx = /^(.+",A:H)(\d+)(,.+)$/;
   const att = getAttbibute(rgx, lfData);
   const title = '%*getcust(Mes0411:7800)';
-  const file = "%sgu'ppmcache'\\list\\attributes.txt";
-  const inputOpts = `'title':'${title} : ${att}','mode':'e','leavecancel':true,'list':'on','module':'off','file':'${file}'`;
+  const inputOpts =
+    `'title': '${title} : ${att}',` +
+    "'mode':'e'," +
+    "'list':'on'," +
+    "'module':'off'," +
+    "'detail':'user1'," +
+    "'leavecancel':false," +
+    `'file':'${LIST_NAME}'`;
   const input = PPx.Extract(`%*script("%sgu'ppmlib'\\input.js","{${inputOpts}}")`);
 
   if (input === '[error]' || isEmptyStr(input)) {
