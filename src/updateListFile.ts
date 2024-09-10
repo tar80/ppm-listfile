@@ -4,16 +4,16 @@
  */
 
 import {info, useLanguage} from '@ppmdev/modules/data.ts';
-import {readLines, writeLines} from '@ppmdev/modules/io.ts';
+import {confirmFileEncoding, readLines, writeLines} from '@ppmdev/modules/io.ts';
 import {validArgs} from '@ppmdev/modules/argument.ts';
 import {isEmptyStr, isZero, withinRange} from '@ppmdev/modules/guard.ts';
 import {langLF} from './mod/language.ts';
-import {fileEnc, keepState} from './mod/core.ts';
+import {keepState} from './mod/core.ts';
 
 const lang = langLF[useLanguage()];
 
 const main = (): void => {
-  const [argEnc] = validArgs();
+  const [encSpec] = validArgs();
   const path = PPx.Extract('%FDV').replace('::listfile', '');
   const exitcode = PPx.Execute('%K"@w"');
 
@@ -22,7 +22,7 @@ const main = (): void => {
     PPx.Quit(-1);
   }
 
-  const enc = fileEnc(argEnc);
+  const enc = confirmFileEncoding(encSpec);
   const [error, data] = readLines({path, enc, linefeed: info.nlcode});
 
   if (error) {

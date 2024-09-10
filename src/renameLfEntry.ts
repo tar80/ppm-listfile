@@ -5,17 +5,16 @@
 
 import {safeArgs} from '@ppmdev/modules/argument.ts';
 import {info, useLanguage} from '@ppmdev/modules/data.ts';
+import debug from '@ppmdev/modules/debug.ts';
 import fso from '@ppmdev/modules/filesystem.ts';
 import {isEmptyStr, isZero} from '@ppmdev/modules/guard.ts';
-import {readLines, writeLines} from '@ppmdev/modules/io.ts';
+import {confirmFileEncoding, readLines, writeLines} from '@ppmdev/modules/io.ts';
 import {langLF} from './mod/language.ts';
-import {fileEnc} from './mod/core.ts';
-import debug from '@ppmdev/modules/debug.ts';
 
 const lang = langLF[useLanguage()];
 
 const main = (): number => {
-  const [argEnc] = safeArgs(info.encode);
+  const [encspec] = safeArgs(info.encode);
   const dirType = PPx.DirectoryType;
 
   if (PPx.EntryState < 2) {
@@ -27,7 +26,7 @@ const main = (): number => {
   }
 
   const entry = PPx.Extract('%FDCN');
-  const enc = fileEnc(argEnc);
+  const enc = confirmFileEncoding(encspec);
 
   if (fso.FileExists(entry) || fso.FolderExists(entry)) {
     PPx.Execute('%K"@R"');
@@ -35,7 +34,7 @@ const main = (): number => {
     return 4;
   }
 
-  const input = PPx.Extract(`%*input("%C" -title:"%*getcust(Mes0411:TREN)" -mode:Ec -k *cursor -8%%:*mapkey use,K_ppmRename)`);
+  const input = PPx.Extract(`%*input("%C" -title:"${lang.rename}" -mode:Ec -k *cursor -8%%:*mapkey use,K_ppmRename)`);
   const exitcode = PPx.Extract();
 
   if (!isZero(exitcode) || isEmptyStr(input)) {

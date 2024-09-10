@@ -6,16 +6,16 @@ import {validArgs} from '@ppmdev/modules/argument.ts';
 import {useLanguage} from '@ppmdev/modules/data.ts';
 import fso from '@ppmdev/modules/filesystem.ts';
 import {isEmptyStr} from '@ppmdev/modules/guard.ts';
-import {readLines, writeLines} from '@ppmdev/modules/io.ts';
+import {confirmFileEncoding, readLines, writeLines} from '@ppmdev/modules/io.ts';
 import {langEnhanceAttributes} from './mod/language.ts';
-import {fileEnc, getIndex} from './mod/core.ts';
+import {getIndex} from './mod/core.ts';
 import debug from '@ppmdev/modules/debug.ts';
 
 const LIST_NAME = "%sgu'ppmcache'\\complist\\attributes.txt";
 const lang = langEnhanceAttributes[useLanguage()];
 
 const main = () => {
-  const [argEnc] = validArgs();
+  const [encSpec] = validArgs();
   const entry = PPx.Extract('%R');
 
   if (fso.FileExists(entry) || fso.FolderExists(entry)) {
@@ -31,7 +31,7 @@ const main = () => {
   }
 
   const path = PPx.Extract('%FDV');
-  const enc = fileEnc(argEnc);
+  const enc = confirmFileEncoding(encSpec);
   const [error, data] = readLines({path, enc});
 
   if (error) {

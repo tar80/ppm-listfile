@@ -3,21 +3,21 @@
  * @arg 1 {string} - Specify ListFile encode. "utf8" | "sjis"
  */
 
-import {isEmptyStr} from '@ppmdev/modules/guard.ts';
-import {buildLfItem} from '@ppmdev/parsers/listfile.ts';
 import {safeArgs} from '@ppmdev/modules/argument.ts';
 import {info, useLanguage} from '@ppmdev/modules/data.ts';
-import {readLines, writeLines} from '@ppmdev/modules/io.ts';
-import {langNoteListFile} from './mod/language.ts';
-import {fileEnc, getIndex} from './mod/core.ts';
 import debug from '@ppmdev/modules/debug.ts';
+import {isEmptyStr} from '@ppmdev/modules/guard.ts';
+import {confirmFileEncoding, readLines, writeLines} from '@ppmdev/modules/io.ts';
+import {buildLfItem} from '@ppmdev/parsers/listfile.ts';
+import {getIndex} from './mod/core.ts';
+import {langNoteListFile} from './mod/language.ts';
 
 const lang = langNoteListFile[useLanguage()];
 
 const main = () => {
-  const [pathSpec, argEnc] = safeArgs(undefined, info.encode);
+  const [pathspec, encspec] = safeArgs(undefined, info.encode);
   const dirType = PPx.DirectoryType;
-  const path = dirType === 4 ? PPx.Extract('%FDV').replace('::listfile', '') : pathSpec;
+  const path = dirType === 4 ? PPx.Extract('%FDV').replace('::listfile', '') : pathspec;
 
   if (!path) {
     PPx.linemessage(`!"${lang.notListFile}`);
@@ -36,8 +36,9 @@ const main = () => {
     return;
   }
 
-  let error, errorMsg;
-  const enc = fileEnc(argEnc);
+  let error: boolean;
+  let errorMsg: string;
+  const enc = confirmFileEncoding(encspec);
 
   if (dirType === 4) {
     const [error1, data] = readLines({path, enc, linefeed: info.nlcode});

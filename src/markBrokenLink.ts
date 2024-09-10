@@ -2,10 +2,10 @@
 
 import fso from '@ppmdev/modules/filesystem.ts';
 
-for (const o = PPx.Entry.AllEntry; !o.atEnd(); o.moveNext()) {
-  const path = o.Name;
+for (const obj = PPx.Entry.AllEntry; !obj.atEnd(); obj.moveNext()) {
+  const path = obj.Name;
 
   if (!fso.FileExists(path) && !fso.FolderExists(path)) {
-    o.Mark = 1;
+    obj.Mark = 1;
   }
 }

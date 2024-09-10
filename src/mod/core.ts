@@ -1,13 +1,3 @@
-import type {FileEncode} from '@ppmdev/modules/types.ts';
-import {info} from '@ppmdev/modules/data.ts';
-
-/**
- * Returns a string of type FileEncode
- * @param enc - A string that seems to be FileEncode
- * @return "utf8" | "utf16le" | "sjis" as FileEncode
- */
-export const fileEnc = (enc: string): FileEncode => (enc === 'utf8' || enc === 'sjis' ? enc : info.encode);
-
 /**
  * Adjust and return the mark/highlight attribute value of a string in ListFile format
  * @param line A string in ListFile format
