@@ -15,9 +15,9 @@ import {langNoteListFile} from './mod/language.ts';
 const lang = langNoteListFile[useLanguage()];
 
 const main = () => {
-  const [pathspec, encspec] = safeArgs(undefined, info.encode);
+  const [pathSpec, encSpec] = safeArgs(undefined, info.encode);
   const dirType = PPx.DirectoryType;
-  const path = dirType === 4 ? PPx.Extract('%FDV').replace('::listfile', '') : pathspec;
+  const path = dirType === 4 ? PPx.Extract('%FDV').replace('::listfile', '') : pathSpec;
 
   if (!path) {
     PPx.linemessage(`!"${lang.notListFile}`);
@@ -38,7 +38,7 @@ const main = () => {
 
   let error: boolean;
   let errorMsg: string;
-  const enc = confirmFileEncoding(encspec);
+  const enc = confirmFileEncoding(encSpec);
 
   if (dirType === 4) {
     const [error1, data] = readLines({path, enc, linefeed: info.nlcode});
